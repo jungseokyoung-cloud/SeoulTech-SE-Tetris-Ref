@@ -1,13 +1,11 @@
 package seoultech.se.tetris.component;
 
-import seoultech.se.tetris.component.model.DataManager;
 import seoultech.se.tetris.component.setting.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import javax.swing.ImageIcon;
 
 public class Setting extends JFrame {
@@ -135,7 +133,7 @@ public class Setting extends JFrame {
                 disPose();
             }
             else if (keySetting.equals(e.getSource())) { // restartButton pressed
-                new KeySetting(getThis().getLocation().x, getThis().getLocation().y);
+                new P1KeySetting(getThis().getLocation().x, getThis().getLocation().y);
                 disPose();
             }
             else if (reset.equals(e.getSource())) { // restartButton pressed

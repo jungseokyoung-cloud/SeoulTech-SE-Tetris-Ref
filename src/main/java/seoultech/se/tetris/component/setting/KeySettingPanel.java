@@ -1,62 +1,38 @@
 package seoultech.se.tetris.component.setting;
 
-import seoultech.se.tetris.component.Setting;
 import seoultech.se.tetris.component.model.DataManager;
-import seoultech.se.tetris.component.model.KeystrokeUtil;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class KeySetting extends JFrame {
-    private Container container;
-    private JPanel backButtonPanel, menuPanel;
-    private JButton backButton;
+public class KeySettingPanel extends JPanel {
     private JButton right, left, rotate, hardDrop, pause,down;
     private JLabel currLeft,currDown,currRight,currRotate,currHarddrop,currPause;
-    private int leftCode, rightCode, downCode, rotateCode, hardDropCode, pauseCode;
+    private int mode;
+    private int [] keyArr;
 
-    public KeySetting(int x, int y) {
-        this.setSize(500, 600);
-        this.setLocation(x, y);
-        this.setLayout(new BorderLayout(25, 25));
-        leftCode = DataManager.getInstance().getLeft();
-        rightCode = DataManager.getInstance().getRight();
-        downCode = DataManager.getInstance().getDown();
-        rotateCode = DataManager.getInstance().getRotate();
-        hardDropCode = DataManager.getInstance().getHarddrop();
-        pauseCode = DataManager.getInstance().getPause();
+    public KeySettingPanel(int keyArr[]) {
+        this.keyArr = keyArr;
+        this.mode = mode;
+        this.setLayout(new GridLayout(6,1,5,0));
 
-        setbackButtonPanel();
-        setMenuPanel();
+        setMenu();
 
-        this.add(backButtonPanel, BorderLayout.NORTH);
-        this.add(new JPanel(), BorderLayout.WEST);
-        this.add(menuPanel, BorderLayout.CENTER);
 
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setVisible(true);
-    }
-    private void setbackButtonPanel(){
-        backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backButton = new JButton("back");
-        backButton.addActionListener(listner);
-        backButtonPanel.add(backButton);
     }
 
-    private void setMenuPanel(){
-        menuPanel = new JPanel(new GridLayout(6,1,5,0));
 
+    public void setMenu(){
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         left = new JButton("Move Left");
         left.setPreferredSize(new Dimension(180, 60));
         left.addActionListener(listner);
 
-        currLeft = new JLabel(KeyEvent.getKeyText(DataManager.getInstance().getLeft()));
+        currLeft = new JLabel(KeyEvent.getKeyText(keyArr[0]));
         currLeft.setPreferredSize(new Dimension(180,60));
         currLeft.setHorizontalAlignment(JLabel.CENTER);
         leftPanel.add(left);
@@ -66,7 +42,7 @@ public class KeySetting extends JFrame {
         right = new JButton("Move Right");
         right.setPreferredSize(new Dimension(180, 60));
         right.addActionListener(listner);
-        currRight = new JLabel(KeyEvent.getKeyText(DataManager.getInstance().getRight()));
+        currRight = new JLabel(KeyEvent.getKeyText(keyArr[1]));
         currRight.setPreferredSize(new Dimension(180,60));
         currRight.setHorizontalAlignment(JLabel.CENTER);
 
@@ -77,7 +53,7 @@ public class KeySetting extends JFrame {
         down = new JButton("Move Down");
         down.setPreferredSize(new Dimension(180, 60));
         down.addActionListener(listner);
-        currDown = new JLabel(KeyEvent.getKeyText(DataManager.getInstance().getDown()));
+        currDown = new JLabel(KeyEvent.getKeyText(keyArr[2]));
         currDown.setPreferredSize(new Dimension(180,60));
         currDown.setHorizontalAlignment(JLabel.CENTER);
         downPanel.add(down);
@@ -87,7 +63,7 @@ public class KeySetting extends JFrame {
         rotate = new JButton("Rotate");
         rotate.setPreferredSize(new Dimension(180, 60));
         rotate.addActionListener(listner);
-        currRotate = new JLabel(KeyEvent.getKeyText(DataManager.getInstance().getRotate()));
+        currRotate = new JLabel(KeyEvent.getKeyText(keyArr[3]));
         currRotate.setPreferredSize(new Dimension(180,60));
         currRotate.setHorizontalAlignment(JLabel.CENTER);
         rotatePanel.add(rotate);
@@ -97,7 +73,7 @@ public class KeySetting extends JFrame {
         hardDrop = new JButton("HardDrop");
         hardDrop.setPreferredSize(new Dimension(180, 60));
         hardDrop.addActionListener(listner);
-        currHarddrop = new JLabel(KeyEvent.getKeyText(DataManager.getInstance().getHarddrop()));
+        currHarddrop = new JLabel(KeyEvent.getKeyText(keyArr[4]));
         currHarddrop.setPreferredSize(new Dimension(180,60));
         currHarddrop.setHorizontalAlignment(JLabel.CENTER);
         hardDropPanel.add(hardDrop);
@@ -107,18 +83,18 @@ public class KeySetting extends JFrame {
         pause = new JButton("Pause");
         pause.setPreferredSize(new Dimension(180, 60));
         pause.addActionListener(listner);
-        currPause = new JLabel(KeyEvent.getKeyText(DataManager.getInstance().getPause()));
+        currPause = new JLabel(KeyEvent.getKeyText(keyArr[5]));
         currPause.setPreferredSize(new Dimension(180,60));
         currPause.setHorizontalAlignment(JLabel.CENTER);
         pausePanel.add(pause);
         pausePanel.add(currPause);
 
-        menuPanel.add(leftPanel);
-        menuPanel.add(rightPanel);
-        menuPanel.add(downPanel);
-        menuPanel.add(rotatePanel);
-        menuPanel.add(hardDropPanel);
-        menuPanel.add(pausePanel);
+        this.add(leftPanel);
+        this.add(rightPanel);
+        this.add(downPanel);
+        this.add(rotatePanel);
+        this.add(hardDropPanel);
+        this.add(pausePanel);
     }
 
     public class MyKeyListner implements KeyListener {
@@ -135,12 +111,12 @@ public class KeySetting extends JFrame {
         public void keyPressed(KeyEvent e) {
             label.setText(KeyEvent.getKeyText(e.getKeyCode()));
 
-            if(label == currLeft) leftCode = e.getKeyCode();
-            else if(label == currRight) rightCode = e.getKeyCode();
-            else if(label == currDown) downCode = e.getKeyCode();
-            else if(label == currHarddrop) hardDropCode = e.getKeyCode();
-            else if(label == currPause) pauseCode = e.getKeyCode();
-            else rotateCode = e.getKeyCode();
+            if(label == currLeft) keyArr[0] = e.getKeyCode();
+            else if(label == currRight) keyArr[1] = e.getKeyCode();
+            else if(label == currDown) keyArr[2] = e.getKeyCode();
+            else if(label == currHarddrop) keyArr[3] = e.getKeyCode();
+            else if(label == currPause) keyArr[4] = e.getKeyCode();
+            else keyArr[5] = e.getKeyCode();
         }
 
         @Override
@@ -148,18 +124,14 @@ public class KeySetting extends JFrame {
 
         }
     }
-
     ActionListener listner = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (backButton.equals(e.getSource())) { //terminateButton pressed
-                go_back();
-            }
-            else if (left.equals(e.getSource())) { // left pressed
+            if (left.equals(e.getSource())) { // left pressed
                 MyKeyListner listner = new MyKeyListner(currLeft);
                 left.addKeyListener(listner);
 
-             }
+            }
             else if (right.equals(e.getSource())) { // right pressed
                 MyKeyListner listner = new MyKeyListner(currRight);
                 right.addKeyListener(listner);
@@ -185,32 +157,5 @@ public class KeySetting extends JFrame {
             }
         }
     };
-
-    private boolean errorCheck(){
-        int []arr = {rotateCode, pauseCode, rightCode, leftCode, hardDropCode, downCode};
-        for(int i = 0; i<arr.length; i++){
-            for(int j = i +1; j<arr.length; j++){
-                if(arr[i] == arr[j]) return false;
-            }
-        }
-        return true;
-    }
-
-
-    private void go_back() {
-        if(errorCheck()) {
-            DataManager.getInstance().setKey(leftCode, rightCode, downCode, pauseCode, rotateCode, hardDropCode);
-            new Setting(getThis().getLocation().x, getThis().getLocation().y);
-            getThis().dispose();
-        }
-        else {
-            JOptionPane errorPane = new JOptionPane();
-            errorPane.setLocation(this.getLocation().x, this.getLocation().y);
-            errorPane.showMessageDialog(null, "중복된 키가 존재합니다.","KEY_ERROR", JOptionPane.WARNING_MESSAGE);
-
-        }
-    }
-
-    private JFrame getThis() {return this;}
 
 }
